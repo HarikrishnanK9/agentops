@@ -9,7 +9,7 @@ _original_print = builtins.print
 # Global buffer to store logs
 _log_buffer = StringIO()
 
-
+print_logger = None  # expose for numba compatibility
 def setup_print_logger() -> None:
     """
     Instruments the built-in print function and configures logging to use a memory buffer.
@@ -29,6 +29,7 @@ def setup_print_logger() -> None:
         # Ensure the new logger doesn't propagate to root
         buffer_logger.propagate = False
 
+    global print_logger 
     def print_logger(*args: Any, **kwargs: Any) -> None:
         """
         Custom print function that logs to buffer and console.
